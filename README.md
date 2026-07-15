@@ -58,8 +58,8 @@ Set your Icecast URL in `docker-compose.yml`, then:
 docker compose up -d
 ```
 
-The service is limited to 64 MB of RAM and restarts automatically
-(`restart: unless-stopped`).
+The service is limited to 64 MB of RAM, restarts automatically
+(`restart: unless-stopped`) and has a built-in healthcheck.
 
 ### With docker run
 
@@ -74,6 +74,8 @@ Then check `http://localhost:9146/metrics`.
 
 ```
 Usage of ./icecast_exporter:
+  -healthcheck
+        Check a running exporter instance and exit (for use as a container healthcheck).
   -icecast.scrape-uri string
         URI on which to scrape Icecast. (default "http://localhost:8000/status-json.xsl")
   -icecast.timeout duration
@@ -180,8 +182,8 @@ go test ./...
 docker compose up -d
 ```
 
-Сервис ограничен 64 МБ ОЗУ и перезапускается автоматически
-(`restart: unless-stopped`).
+Сервис ограничен 64 МБ ОЗУ, перезапускается автоматически
+(`restart: unless-stopped`) и имеет встроенный healthcheck.
 
 ### Через docker run
 
@@ -196,6 +198,8 @@ docker run -d --rm -p 9146:9146 icecast_exporter \
 
 ```
 Usage of ./icecast_exporter:
+  -healthcheck
+        Проверить работающий экземпляр экспортера и выйти (для healthcheck контейнера).
   -icecast.scrape-uri string
         URI, с которого снимать статистику Icecast. (по умолчанию "http://localhost:8000/status-json.xsl")
   -icecast.timeout duration

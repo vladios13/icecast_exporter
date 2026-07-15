@@ -27,4 +27,7 @@ COPY --from=build /icecast_exporter /icecast_exporter
 
 EXPOSE 9146
 USER nobody
+# The scratch image has no shell/curl; the binary probes itself.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+    CMD ["/icecast_exporter", "-healthcheck"]
 ENTRYPOINT ["/icecast_exporter"]

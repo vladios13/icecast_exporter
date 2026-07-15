@@ -30,6 +30,7 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -494,14 +495,42 @@ func (e *Exporter) scrape() *IcecastStatus {
 	return s
 }
 
+// runHealthcheck probes /healthz of a locally running exporter and
+// returns a process exit code (0 healthy, 1 unhealthy). Used as the
+// container HEALTHCHECK since the scratch image has no shell or curl.
+func runHealthcheck(listenAddress string) int {
+	host, port, err := net.SplitHostPort(listenAddress)
+	if err != nil {
+		return 1
+	}
+	if host == "" {
+		host = "127.0.0.1"
+	}
+	client := &http.Client{Timeout: 3 * time.Second}
+	resp, err := client.Get("http://" + net.JoinHostPort(host, port) + "/healthz")
+	if err != nil {
+		return 1
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return 1
+	}
+	return 0
+}
+
 func main() {
 	var (
 		listenAddress    = flag.String("web.listen-address", ":9146", "Address to listen on for web interface and telemetry.")
 		metricsPath      = flag.String("web.telemetry-path", "/metrics", "Path under which to expose metrics.")
 		icecastScrapeURI = flag.String("icecast.scrape-uri", "http://localhost:8000/status-json.xsl", "URI on which to scrape Icecast.")
 		icecastTimeout   = flag.Duration("icecast.timeout", 5*time.Second, "Timeout for trying to get stats from Icecast.")
+		healthcheck      = flag.Bool("healthcheck", false, "Check a running exporter instance and exit (for use as a container healthcheck).")
 	)
 	flag.Parse()
+
+	if *healthcheck {
+		os.Exit(runHealthcheck(*listenAddress))
+	}
 
 	logger := slog.New(slog.NewTextHandler(os.Stderr, nil))
 

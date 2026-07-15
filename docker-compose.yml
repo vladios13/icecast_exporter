@@ -7,4 +7,10 @@ services:
       - "9146:9146"
     mem_limit: 64m
     memswap_limit: 64m
+    healthcheck:
+      test: ["CMD", "/icecast_exporter", "-healthcheck"]
+      interval: 30s
+      timeout: 5s
+      start_period: 5s
+      retries: 3
     restart: unless-stopped
