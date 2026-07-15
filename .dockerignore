@@ -3,5 +3,4 @@
 .dockerignore
 Dockerfile
 README.md
-PLAN.md
 icecast_exporter

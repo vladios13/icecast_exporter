@@ -1,9 +1,6 @@
 # Compiled binary
 /icecast_exporter
 
-# Internal planning document (kept locally, not published)
-/PLAN.md
-
 # Editor/IDE
 .idea/
 .vscode/
