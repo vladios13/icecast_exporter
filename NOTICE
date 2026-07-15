@@ -1,0 +1,10 @@
+Exporter for Icecast stats.
+Copyright 2016 Markus Lindenberg
+
+This product includes software developed at
+SoundCloud Ltd. (http://soundcloud.com/).
+
+This is a modernized fork of the original icecast_exporter by
+Markus Lindenberg (https://github.com/markuslindenberg/icecast_exporter),
+licensed under the Apache License, Version 2.0.
+Fork modifications Copyright 2026 icecast_exporter fork contributors.
