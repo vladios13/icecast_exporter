@@ -50,6 +50,19 @@ go test ./...
 
 ## Running
 
+### With docker compose
+
+Set your Icecast URL in `docker-compose.yml`, then:
+
+```bash
+docker compose up -d
+```
+
+The service is limited to 64 MB of RAM and restarts automatically
+(`restart: unless-stopped`).
+
+### With docker run
+
 ```bash
 docker run -d --rm -p 9146:9146 icecast_exporter \
   -icecast.scrape-uri http://192.168.10.1:9804/status-json.xsl
@@ -158,6 +171,19 @@ go test ./...
 ```
 
 ## Запуск
+
+### Через docker compose
+
+Укажите URL вашего Icecast в `docker-compose.yml`, затем:
+
+```bash
+docker compose up -d
+```
+
+Сервис ограничен 64 МБ ОЗУ и перезапускается автоматически
+(`restart: unless-stopped`).
+
+### Через docker run
 
 ```bash
 docker run -d --rm -p 9146:9146 icecast_exporter \

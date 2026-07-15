@@ -1,0 +1,10 @@
+services:
+  icecast-exporter:
+    build: .
+    image: icecast_exporter
+    command: ["-icecast.scrape-uri", "http://192.168.10.1:9804/status-json.xsl"]
+    ports:
+      - "9146:9146"
+    mem_limit: 64m
+    memswap_limit: 64m
+    restart: unless-stopped
