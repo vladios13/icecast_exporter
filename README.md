@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 [![Go](https://img.shields.io/badge/Go-1.24+-00ADD8.svg?logo=go&logoColor=white)](https://go.dev/)
-[![Docker](https://img.shields.io/badge/Docker-ready-2496ED.svg?logo=docker&logoColor=white)](Dockerfile)
+[![Docker](https://img.shields.io/badge/Docker-vladios13%2Ficecast__exporter-2496ED.svg?logo=docker&logoColor=white)](https://hub.docker.com/r/vladios13/icecast_exporter)
 [![Prometheus](https://img.shields.io/badge/Prometheus-exporter-E6522C.svg?logo=prometheus&logoColor=white)](https://prometheus.io/)
 [![Platform](https://img.shields.io/badge/Platform-Linux-FCC624.svg?logo=linux&logoColor=black)](https://www.kernel.org/)
 
@@ -17,6 +17,16 @@ A modernized fork of
 by Markus Lindenberg (Apache License 2.0).
 
 By default the exporter listens on port **9146**.
+
+## Quick start
+
+```bash
+docker pull vladios13/icecast_exporter
+docker run --rm -p 9146:9146 vladios13/icecast_exporter \
+  -icecast.scrape-uri http://192.168.10.1:9804/status-json.xsl
+```
+
+Then check `http://localhost:9146/metrics`.
 
 ## What's changed in this fork
 
@@ -141,6 +151,16 @@ Original work Copyright 2016 Markus Lindenberg.
 Маркуса Линденберга (Apache License 2.0).
 
 По умолчанию экспортер слушает порт **9146**.
+
+## Быстрый старт
+
+```bash
+docker pull vladios13/icecast_exporter
+docker run --rm -p 9146:9146 vladios13/icecast_exporter \
+  -icecast.scrape-uri http://192.168.10.1:9804/status-json.xsl
+```
+
+Затем проверьте `http://localhost:9146/metrics`.
 
 ## Что изменено в этом форке
 
