@@ -468,7 +468,12 @@ func (e *Exporter) scrape() *IcecastStatus {
 		e.logger.Error("Can't scrape Icecast", "err", err)
 		return nil
 	}
-	defer resp.Body.Close()
+	// Drain before close so the keep-alive connection can be reused,
+	// including on the error paths below. ReadAll already drains on success.
+	defer func() {
+		_, _ = io.Copy(io.Discard, resp.Body)
+		resp.Body.Close()
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		e.up.Set(0)
@@ -545,6 +550,11 @@ func main() {
 		_, _ = w.Write([]byte("ok\n"))
 	})
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/" {
+			http.NotFound(w, r)
+			return
+		}
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		_, _ = w.Write([]byte(`<html>
              <head><title>Icecast Exporter</title></head>
              <body>
