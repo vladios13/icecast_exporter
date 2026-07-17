@@ -162,6 +162,9 @@ type IcecastStatus struct {
 //
 // which encoding/json rejects with "invalid character ' ' in numeric
 // literal". sanitizeJSON quotes such bare values so the document parses.
+// It also escapes raw control bytes (< 0x20) that appear inside string
+// literals — Icecast passes ICY metadata (e.g. track titles) through
+// verbatim, and unescaped control characters are illegal in JSON strings.
 // Valid JSON passes through unchanged (strings are respected, so values
 // that are already quoted are never touched).
 func sanitizeJSON(data []byte) []byte {
@@ -174,6 +177,13 @@ func sanitizeJSON(data []byte) []byte {
 	for i < len(data) {
 		c := data[i]
 		if inString {
+			if !escaped && c < 0x20 {
+				// Raw control byte (e.g. 0x1c from ICY metadata): illegal
+				// unescaped inside a JSON string. Escape it so the document parses.
+				fmt.Fprintf(&out, `\u%04x`, c)
+				i++
+				continue
+			}
 			out.WriteByte(c)
 			if escaped {
 				escaped = false

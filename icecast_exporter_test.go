@@ -138,6 +138,11 @@ func TestSanitizeJSON(t *testing.T) {
 			in:   `{"x": , "y": 1}`,
 			want: `{"x": null, "y": 1}`,
 		},
+		{
+			name: "raw control char inside string escaped",
+			in:   "{\"title\": \"A\x1cB\"}",
+			want: `{"title": "A\u001cB"}`,
+		},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
